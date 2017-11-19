@@ -29,12 +29,16 @@ CTexture t_cristal;
 CTexture t_puerta;
 CTexture t_puertaatras;
 CTexture t_castillo;
+CTexture t_concreto;
 CTexture t_floor;
+CTexture t_reja;
+CTexture t_bosque;
 
 
 CFiguras fig1;
 CFiguras fig2;
 CFiguras fig3;
+CFiguras entorno;
 
 
 
@@ -45,7 +49,7 @@ int font=(int)GLUT_BITMAP_TIMES_ROMAN_24;
 
 void InitGL ( GLvoid )     // Inicializamos parametros
 {
-	glClearColor(0.5f, 0.5f, 0.8f, 0.0f);				// Azul de fondo	
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);				// Azul de fondo	
 
 	glEnable(GL_TEXTURE_2D);
 
@@ -106,6 +110,18 @@ void InitGL ( GLvoid )     // Inicializamos parametros
 	t_floor.LoadTGA("floor.tga");          //CARGA EL ARCHIVO
 	t_floor.BuildGLTexture();             //GENERA LA TEXTURA
 	t_floor.ReleaseImage();
+
+	t_reja.LoadTGA("reja.tga");          //CARGA EL ARCHIVO
+	t_reja.BuildGLTexture();             //GENERA LA TEXTURA
+	t_reja.ReleaseImage();
+
+	t_concreto.LoadTGA("concreto.tga");          //CARGA EL ARCHIVO
+	t_concreto.BuildGLTexture();             //GENERA LA TEXTURA
+	t_concreto.ReleaseImage();
+
+	t_bosque.LoadTGA("bosque.tga");          //CARGA EL ARCHIVO
+	t_bosque.BuildGLTexture();             //GENERA LA TEXTURA
+	t_bosque.ReleaseImage();
 }
 
 
@@ -188,9 +204,9 @@ void prisma (GLuint textura1, GLuint textura2)  //Funcion creacion prisma
 		glBegin(GL_POLYGON);  //Top
 			glNormal3f( 0.0f, 1.0f, 0.0f);
 			glTexCoord2f(0.0, 0.0f); glVertex3fv(vertice[4]);
-			glTexCoord2f(4.0, 0.0f); glVertex3fv(vertice[5]);
-			glTexCoord2f(4.0, 4.0f); glVertex3fv(vertice[6]);
-			glTexCoord2f(0.0f, 4.0f); glVertex3fv(vertice[7]);
+			glTexCoord2f(1.0, 0.0f); glVertex3fv(vertice[5]);
+			glTexCoord2f(1.0, 1.0f); glVertex3fv(vertice[6]);
+			glTexCoord2f(0.0f, 1.0f); glVertex3fv(vertice[7]);
 		glEnd();
 }
 
@@ -207,46 +223,55 @@ void display ( void )   // Creamos la funcion donde se dibuja
 		glRotatef(eye_camY, 0.0, 1.0, 0.0);
 		glRotatef(eye_camZ, 0.0, 0.0, 1.0);
 
+
+		glPushMatrix();
+		glDisable(GL_LIGHTING);
+		glTranslatef(0.0,150.0,0.0);
+		entorno.skybox(500, 550, 500, t_bosque.GLindex);
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+
 		///////////////////////////CASTILLO///////////////////
 ///////////////////////////////////////////////////////////////////////////ESCALERA
-
-		glPushMatrix();                                      //escalera
+		glDisable(GL_LIGHTING);
+		glPushMatrix();  
+                                    //escalera
 			glColor3f(1.0, 2.0, 1.0);
 			glScalef(20.0,1.0,2.0);
 			glEnable(GL_ALPHA_TEST);
 			glAlphaFunc(GL_GREATER, 0.1);
-			prisma(t_castillo.GLindex, t_castillo.GLindex);
+			prisma(t_concreto.GLindex, t_castillo.GLindex);
 			glDisable(GL_ALPHA_TEST);
 
 			glTranslatef(0.0,1.0,-1.0);
-			prisma(t_borde.GLindex, t_borde.GLindex);
+			prisma(t_concreto.GLindex, t_castillo.GLindex);
 
 			glTranslatef(0.0, 1.0, -1.0);
-			prisma(t_castillo.GLindex, t_castillo.GLindex);
+			prisma(t_concreto.GLindex, t_castillo.GLindex);
 
 			glTranslatef(0.0, 1.0, -1.0);
-			prisma(t_castillo.GLindex, t_castillo.GLindex);
+			prisma(t_concreto.GLindex, t_castillo.GLindex);
 
 			glTranslatef(0.0, 1.0, -1.0);
-			prisma(t_castillo.GLindex, t_castillo.GLindex);
+			prisma(t_concreto.GLindex, t_castillo.GLindex);
 
 			glTranslatef(0.0, 1.0, -1.0);
-			prisma(t_castillo.GLindex, t_castillo.GLindex);
+			prisma(t_concreto.GLindex, t_castillo.GLindex);
 
 			glTranslatef(0.0, 1.0, -1.0);
-			prisma(t_castillo.GLindex, t_castillo.GLindex);
+			prisma(t_concreto.GLindex, t_castillo.GLindex);
 
 			glTranslatef(0.0, 1.0, -1.0);
-			prisma(t_castillo.GLindex, t_castillo.GLindex);
+			prisma(t_concreto.GLindex, t_castillo.GLindex);
 
 			glTranslatef(0.0, 1.0, -1.0);
-			prisma(t_castillo.GLindex, t_castillo.GLindex);
+			prisma(t_concreto.GLindex, t_castillo.GLindex);
 
 			glTranslatef(0.0, 1.0, -1.0);
-			prisma(t_castillo.GLindex, t_castillo.GLindex);
+			prisma(t_concreto.GLindex, t_castillo.GLindex);
 
 			glTranslatef(0.0, 1.0, -1.0);
-			prisma(t_castillo.GLindex, t_castillo.GLindex);
+			prisma(t_concreto.GLindex, t_castillo.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
@@ -262,49 +287,52 @@ void display ( void )   // Creamos la funcion donde se dibuja
 		glPushMatrix();                                  //barda
 		glTranslatef(11.25, 9, -10.5);
 		glScalef(2.5, 18.0, 22.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();                                  //barda
 		glTranslatef(-11.25, 9, -10.5);
 		glScalef(2.5, 18.0, 22.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();                                  //reja
 			glTranslatef(0.0, 63.5, -21.5);
 			glScalef(20.0, 15.0, 1.0);
-			prisma(t_castillo.GLindex, t_castillo.GLindex);
+			glEnable(GL_ALPHA_TEST);
+			glAlphaFunc(GL_GREATER, 0.1);
+			prisma(t_reja.GLindex, t_reja.GLindex);
+			glDisable(GL_ALPHA_TEST);
 		glPopMatrix();
 
 		glPushMatrix();                                  //der_puerta
 		glTranslatef(27.5, 35.5, -20.5);
 		glScalef(35.0, 71.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslatef(80.0, 27.5, -20.5);                 //der_torre_pequeña
 		glScalef(70.0, 55.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 		
 		glPushMatrix();
 		glTranslatef(57.5, 60.0, -20.5);                 //pared_izq
 		glScalef(25.0, 10.0, 3.0);
-		prisma(t_borde.GLindex, t_borde.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslatef(81, 60.0, -20.5);                 //pared_medio
 		glScalef(18.0, 10.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslatef(103.5, 60.0, -20.5);                 //pared_der
 		glScalef(23.0, 10.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
@@ -322,7 +350,7 @@ void display ( void )   // Creamos la funcion donde se dibuja
 		glPushMatrix();
 		glTranslatef(80.0, 92.5, -20.5);                 //der_torre_pequeña_up
 		glScalef(70.0, 55.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
@@ -342,13 +370,13 @@ void display ( void )   // Creamos la funcion donde se dibuja
 		glPushMatrix();                                  //izq_puerta
 		glTranslatef(-27.5, 35.5, -20.5);
 		glScalef(35.0, 71.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslatef(-80.0, 27.5, -20.5);                 //izq_torre_pequeña_down
 		glScalef(70.0, 55.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
@@ -366,25 +394,25 @@ void display ( void )   // Creamos la funcion donde se dibuja
 		glPushMatrix();
 		glTranslatef(-57.5, 60.0, -20.5);                 //pared_izq
 		glScalef(25.0, 10.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslatef(-81, 60.0, -20.5);                 //pared_medio
 		glScalef(18.0, 10.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslatef(-103.5, 60.0, -20.5);                 //pared_der
 		glScalef(23.0, 10.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslatef(-80.0, 92.5, -20.5);                 //izq_torre_pequeña_up
 		glScalef(70.0, 55.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
@@ -404,7 +432,7 @@ void display ( void )   // Creamos la funcion donde se dibuja
 		glPushMatrix();                                  //up_puerta
 		glTranslatef(0.0, 110.5, -20.5);
 		glScalef(90.0, 80.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
@@ -431,12 +459,12 @@ void display ( void )   // Creamos la funcion donde se dibuja
 
 		glPushMatrix();                                  
 		glTranslatef(-133, 200, -15);
-		fig1.torus(25, 20, 50, t_castillo.GLindex);
+		fig1.torus(25, 20, 50, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();
 		glTranslatef(-133, 200, -15);
-		fig3.cono(70, 20, 50, t_castillo.GLindex);
+		fig3.cono(70, 20, 50, t_concreto.GLindex);
 		glPopMatrix();
 
 /////////////////////////////////////////////////////////////////////////////////////////////// CONTORNO
@@ -444,19 +472,19 @@ void display ( void )   // Creamos la funcion donde se dibuja
 		glPushMatrix();                                  //lateral_der
 		glTranslatef(113.5,63.5,-141);
 		glScalef(3.0, 127.0, 238.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();                                  //lateral_izq
-		glTranslatef(-140, 63.5, -141);                   //-113.5, 63.5, -141
+		glTranslatef(-140, 63.5, -141);               
 		glScalef(3.0, 127.0, 238.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();                                  //back
 		glTranslatef(-13.25, 63.5, -261.5);
 		glScalef(256.5, 127.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 //////////////////////////////////////////////////////////////////////////////// PAREDES INTERIORES
@@ -476,21 +504,22 @@ void display ( void )   // Creamos la funcion donde se dibuja
 		glPushMatrix();                                  //pared
 		glTranslatef(35.0,64.0,-124);
 		glScalef(3.0, 106.0, 170.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 		
 		glPushMatrix();                                  //pared
 		glTranslatef(2.5, 64.0, -210.5);
 		glScalef(235, 106.0, 3.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 
 		glPushMatrix();                                  //techo
 		glTranslatef(-13.25, 117, -141);
 		glScalef(250.5, 3.0, 239.0);
-		prisma(t_castillo.GLindex, t_castillo.GLindex);
+		prisma(t_concreto.GLindex, t_concreto.GLindex);
 		glPopMatrix();
 		
+	glEnable(GL_LIGHTING);
 
 
 	glPopMatrix();
